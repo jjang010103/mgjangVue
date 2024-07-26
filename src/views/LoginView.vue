@@ -27,16 +27,11 @@ export default {
 data() {
   return {
     formData: {
-      id: '',
-      password: '',
+      id: null,
+      password: null,
       autoLogin: false
     }
   };
-},
-created() {
-  var token = localStorage.getItem('tkn');
-
-  if(token != null) this.$router.push('/user');
 },
 methods: {
   async login() {
@@ -100,6 +95,7 @@ cursor: pointer;
 
   .logo {
     margin-right: 2rem;
+    margin-top: 2rem;
   }
 }
 </style>

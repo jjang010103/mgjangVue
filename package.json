@@ -10,6 +10,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "ag-grid-community": "^32.0.2",
+    "ag-grid-vue3": "^32.0.2",
     "axios": "^1.7.2",
     "pinia": "^2.0.32",
     "qs": "^6.12.3",

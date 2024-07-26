@@ -25,9 +25,14 @@ export default {
     }
   },
   created() {
-    this.showHeader = this.$route.path !== '/';
+    this.checkLoginStatus();
   },
   methods: {
+    checkLoginStatus(){
+      var token = localStorage.getItem('tkn');
+
+      if(token != null) this.$router.push('/user');
+    },
     logout() {
       localStorage.removeItem('tkn');
       sessionStorage.removeItem('tkn');
@@ -37,6 +42,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  html, body, #app {
+  height: 100%;
+  margin: 0;
+  }
+
   header {
     position: fixed;
     top: 3.5rem;
@@ -55,13 +65,13 @@ export default {
     padding: 0.5rem 1.5rem;
     text-align: center;
     text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
+    color: hsla(160, 100%, 37%, 1);
+    transition: 0.4s;
   }
 
   nav a.router-link-exact-active {
     background-color: rgb(0, 189, 126, 0.2);
-    color: white;
+    color: white;  
   }
 
   nav a.router-link-exact-active:hover {
