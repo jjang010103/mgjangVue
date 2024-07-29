@@ -1,12 +1,11 @@
 <template>
-  <div class="ag-theme-alpine" style="height: 500px; width: 600px;">
-    <ag-grid-vue
-      class="ag-theme-alpine"
-      :rowData="rowData"
-      :columnDefs="columnDefs"
-      :defaultColDef="defaultColDef"
-    ></ag-grid-vue>
-  </div>
+  <div class="divGrid">
+      <ag-grid-vue
+        class="ag-theme-alpine-dark"
+        :rowData="rowData"
+        :columnDefs="columnDefs"
+        :defaultColDef="defaultColDef"></ag-grid-vue>
+    </div>
 </template>
 
 <script>
@@ -39,9 +38,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  /* AG Grid 테마를 사용하기 위한 스타일 */
-  .ag-theme-alpine {
-    height: 100%;
-    width: 100%;
-  }
+
 </style>

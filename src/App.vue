@@ -1,15 +1,16 @@
 <template>
-  <header v-if="showHeader">
-        <img alt="Vue logo" class="logo" src="@/assets/logo.svg"  width="42" height="42" />
-        <nav>
-          <RouterLink to="/user">사용자 관리</RouterLink>
-          <RouterLink to="/product">제품 관리</RouterLink>
-          <RouterLink to="/order">주문 관리</RouterLink>
-          <RouterLink to="/" @click.prevent="logout">로그아웃</RouterLink>
-        </nav>
-  </header>
-
-  <RouterView/>
+  <main>
+    <div  v-if="showHeader">
+      <img alt="Vue logo" class="logo" src="@/assets/logo.svg"  width="42" height="42" />
+      <nav>
+        <RouterLink to="/user">사용자 관리</RouterLink>
+        <RouterLink to="/product">제품 관리</RouterLink>
+        <RouterLink to="/order">주문 관리</RouterLink>
+        <RouterLink to="/" @click.prevent="logout">로그아웃</RouterLink>
+      </nav>
+    </div>
+    <RouterView/>
+  </main>
 </template>
 
 <script>
@@ -42,20 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  html, body, #app {
-  height: 100%;
-  margin: 0;
-  }
-
-  header {
-    position: fixed;
-    top: 3.5rem;
-    left: 3.5rem;
-    align-items: center;
-  }
-
   nav {
-  margin-left: 20px;
   border-left: 1px solid var(--color-border);
   }
 
@@ -79,6 +67,15 @@ export default {
   }
 
   nav a:last-of-type {
-    margin-top: 5rem;
+    background-color: rgb(52, 73, 94, 0.2);
   }
+
+  @media (min-width: 1024px) {
+  main {
+    display: grid;
+    grid-template-columns: 2fr 8fr;
+    padding: 2rem;
+    }
+  }
+
 </style>
