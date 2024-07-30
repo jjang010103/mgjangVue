@@ -1,6 +1,6 @@
 @import './base.css';
 #app {
-  max-width: 1280px;
+  max-width: 1580px;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
@@ -8,8 +8,8 @@
 
 .divGrid {
   padding: 3rem 1rem;
-  width: 50vw;
-  height: 90vh;
+  width: 65vw;
+  height: 86vh;
 }
 
 /* AG Grid 테마를 사용하기 위한 스타일 */

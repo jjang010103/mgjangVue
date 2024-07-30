@@ -73,7 +73,7 @@ export default {
   @media (min-width: 1024px) {
   main {
     display: grid;
-    grid-template-columns: 2fr 8fr;
+    grid-template-columns: 1fr 1fr;
     padding: 2rem;
     }
   }

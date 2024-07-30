@@ -22,41 +22,39 @@
 <script>
 import axios from 'axios';
 import qs from 'qs';
+import { setToken } from '@/utils/tokenUtil';
 
 export default {
-data() {
-  return {
-    formData: {
-      id: null,
-      password: null,
-      autoLogin: false
-    }
-  };
-},
-methods: {
-  async login() {
-    try {
-      const response = await axios.post('/api/auth', 
-        qs.stringify({
-          id: this.formData.id,
-          pw: this.formData.password
-        }));
-
-      if(response.data == null){
-        
+  data() {
+    return {
+      formData: {
+        id: null,
+        password: null,
+        autoLogin: false
       }
-      else{
-        if(this.formData.autoLogin) localStorage.setItem('tkn', response.data);
-        else sessionStorage.setItem('tkn', response.data);
+    };
+  },
+  methods: {
+    async login() {
+      try{
+        const response = await axios.post('api/auth', 
+          qs.stringify({
+              id: this.formData.id,
+              pw: this.formData.password
+          }));
 
-        this.$router.push('/user');
+        if(response.data != ''){
+          setToken(response.data, this.formData.autoLogin);
+          this.$router.push('/user');
+        }
+
+        console.log(response);
       }
-    } catch (error) {
-
-      console.log(error);   
+      catch (err) {
+        console.error(err);
+      }
     }
   }
-}
 };
 </script>
 
