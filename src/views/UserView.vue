@@ -5,7 +5,8 @@
         :rowData="rowData"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
-        @firstDataRendered="onFirstDataRendered"></ag-grid-vue>
+        @firstDataRendered="onFirstDataRendered"
+        @cellFocused="onCellFocused"></ag-grid-vue>
     </div>
 </template>
 
@@ -50,7 +51,10 @@ export default {
           }
          },
         { headerName: "Actions",
-          cellRenderer: "BtnDelete"
+          cellRenderer: "BtnDelete",
+          cellRendererParams: {
+            onDelete: this.onClickedDelete
+          }
         }
       ],
       defaultColDef: {
@@ -59,7 +63,9 @@ export default {
         cellStyle: { textAlign: 'center' }
       },
       rowData: null,
-      pageNum: 1
+      pageNum: 1,
+      focusedRowId: -1,
+      agGridApi: null
     };
   },
   mounted() {
@@ -86,7 +92,14 @@ export default {
       }
     },
     onFirstDataRendered(params) {
-      params.api.sizeColumnsToFit();
+      this.agGridApi = params.api;
+      this.agGridApi.sizeColumnsToFit();
+    },
+    onCellFocused(params){
+      this.focusedRowId = this.agGridApi.getDisplayedRowAtIndex(params.rowIndex).data['code'];
+    },
+    onClickedDelete(){
+      alert(this.focusedRowId);
     }
   }
 };

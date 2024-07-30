@@ -9,7 +9,11 @@
     },
     methods: {
       btnClickedHandler() {
-        alert(`Button clicked: ${this.params.value}`);
+        if (this.params.onDelete) {
+          this.params.onDelete(this.params.data);
+        } else {
+          alert('No delete function provided');
+        }
       }
     }
   };
@@ -18,7 +22,6 @@
 <style lang="scss" scoped>
 .btnDelete {
   background-color: maroon;
-  
 }
 </style>
   
