@@ -65,6 +65,7 @@ export default {
       rowData: null,
       pageNum: 1,
       focusedRowId: -1,
+      focusedRowIndex: -1,
       agGridApi: null
     };
   },
@@ -91,15 +92,33 @@ export default {
         console.error(err);
       }
     },
+    async deleteAccount(rowId){
+      try{
+        const response = await axios.delete('/api/account/' + rowId,{
+          headers: {
+            'Authorization': `Bearer ${getToken()}`
+          }
+        });
+
+        this.rowData.splice(this.focusedRowIndex, 1);
+        this.agGridApi.setRowData(this.rowData);
+
+        alert("Delete completed!");
+      }
+      catch (err) {
+        console.error(err);
+      }
+    },
     onFirstDataRendered(params) {
       this.agGridApi = params.api;
       this.agGridApi.sizeColumnsToFit();
     },
     onCellFocused(params){
-      this.focusedRowId = this.agGridApi.getDisplayedRowAtIndex(params.rowIndex).data['code'];
+      this.focusedRowIndex = params.rowIndex;
+      this.focusedRowId = this.agGridApi.getDisplayedRowAtIndex(this.focusedRowIndex).data['code'];
     },
     onClickedDelete(){
-      alert(this.focusedRowId);
+      this.deleteAccount(this.focusedRowId);
     }
   }
 };
