@@ -1,13 +1,19 @@
 <template>
-  <div class="divGrid">
+  <div class="divMain">
+    <transition name="fade">
+      <div v-if="visiblePopMsgBox" class="divPopMsgBox">Updated!</div>
+    </transition>
+    <div class="divGrid">
       <ag-grid-vue
         class="ag-theme-alpine-dark"
         :rowData="rowData"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         @firstDataRendered="onFirstDataRendered"
-        @cellFocused="onCellFocused"></ag-grid-vue>
+        @cellFocused="onCellFocused"
+        @cellEditingStopped="onCellEditingStopped"></ag-grid-vue>
     </div>
+  </div>
 </template>
 
 <script>
@@ -27,13 +33,13 @@ export default {
       columnDefs: [
         { headerName: "Code", field: "code", hide: true },
         { headerName: "Id", field: "id" },
-        { headerName: "Pw", field: "pw", 
+        { headerName: "Pw", field: "pw", editable: true, 
           valueFormatter: (params) => {
             return '*'.repeat(params.value.length);
           }},
-        { headerName: "E-Mail", field: "email" },
-        { headerName: "Phone", field: "phone" },
-        { headerName: "Address", field: "address" },
+        { headerName: "E-Mail", field: "email", editable: true },
+        { headerName: "Phone", field: "phone", editable: true },
+        { headerName: "Address", field: "address", editable: true },
         { headerName: "Created Date", field: "createdDate",
           valueFormatter: (params) => {
             if(params.value == null){
@@ -53,7 +59,7 @@ export default {
         { headerName: "Actions",
           cellRenderer: "BtnDelete",
           cellRendererParams: {
-            onDelete: this.onClickedDelete
+            onDelete: this.clickedDelete
           }
         }
       ],
@@ -64,13 +70,18 @@ export default {
       },
       rowData: null,
       pageNum: 1,
-      focusedRowId: -1,
+      focusedRowData: null,
       focusedRowIndex: -1,
-      agGridApi: null
+      agGridApi: null,
+      visiblePopMsgBox: false
     };
   },
   mounted() {
     this.getAccounts();
+    window.addEventListener('resize', this.onResize);
+  },
+  beforeUnmount(){
+    window.removeEventListener('resize', this.onResize);
   },
   methods:{
     async getAccounts() {
@@ -94,7 +105,8 @@ export default {
     },
     async deleteAccount(rowId){
       try{
-        const response = await axios.delete('/api/account/' + rowId,{
+        const response = await axios.delete('/api/account/' + rowId, 
+        {
           headers: {
             'Authorization': `Bearer ${getToken()}`
           }
@@ -109,16 +121,51 @@ export default {
         console.error(err);
       }
     },
+    async updateAccount(rowId){
+      try{
+        const response = await axios.put('/api/account', 
+        this.getFocusedRowData(rowId),
+        {
+          headers: {
+            'Authorization': `Bearer ${getToken()}`
+          }
+        });
+      }
+      catch (err) {
+        console.error(err);
+      }
+    },
     onFirstDataRendered(params) {
       this.agGridApi = params.api;
       this.agGridApi.sizeColumnsToFit();
     },
     onCellFocused(params){
       this.focusedRowIndex = params.rowIndex;
-      this.focusedRowId = this.agGridApi.getDisplayedRowAtIndex(this.focusedRowIndex).data['code'];
+      this.focusedRowData = this.getFocusedRowData(this.focusedRowIndex);
     },
-    onClickedDelete(){
-      this.deleteAccount(this.focusedRowId);
+    onCellEditingStopped(params){
+      this.updateAccount(params.node.rowIndex);//onCellFocused 시점이 더 빨라서 엉뚱한 focusedRowIndex가 잡힘
+      this.showPopMsgBox();
+    },
+    onResize(){
+      if(this.agGridApi) {
+        this.agGridApi.sizeColumnsToFit();
+      }
+
+      console.log("resizing");
+    },
+    clickedDelete(){
+      this.deleteAccount(this.focusedRowData.code);
+    },
+    getFocusedRowData(rowIndex){
+      return this.agGridApi.getDisplayedRowAtIndex(rowIndex).data;
+    },
+    showPopMsgBox(){
+      this.visiblePopMsgBox = true;
+
+      setTimeout(() => {
+        this.visiblePopMsgBox = false;
+      }, 750);
     }
   }
 };

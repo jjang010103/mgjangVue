@@ -2,14 +2,40 @@
 #app {
   max-width: 1580px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem;
   font-weight: normal;
 }
 
+.divMain {
+  padding:0 1rem;
+  display: grid;
+  grid-template-rows: 3rem 7rem;
+}
+
 .divGrid {
-  padding: 3rem 1rem;
   width: 65vw;
   height: 86vh;
+  grid-row: 2;
+}
+
+.divPopMsgBox{
+  width: fit-content;
+  height: fit-content;
+  padding: 0.4rem 1.5rem;
+  border-radius: 16px;
+  font-size: small;
+  margin: 0 auto;
+  background-color:rgb(222, 222, 235);
+  box-shadow: 4px 4px 8px rgba(209, 209, 221, 0.2); /* 그림자 추가 */
+  color: rgb(68, 72, 75);
+  grid-row: 1;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease-out;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active 대신에 사용할 수도 있습니다. */ {
+  opacity: 0;
 }
 
 /* AG Grid 테마를 사용하기 위한 스타일 */
