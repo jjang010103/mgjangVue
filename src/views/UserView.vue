@@ -1,8 +1,9 @@
 <template>
   <div class="divMain">
     <transition name="fade">
-      <div v-if="visiblePopMsgBox" class="divPopMsgBox">Updated!</div>
+      <div v-if="visiblePopMsgBox" class="divPopMsgBox" ref="msgBoxPopup">{{ popupMessage }}</div>
     </transition>
+    <div class="divBtn">추가</div>
     <div class="divGrid">
       <ag-grid-vue
         class="ag-theme-alpine-dark"
@@ -23,7 +24,6 @@ import { getToken } from '@/utils/tokenUtil';
 import BtnDelete from "@/components/gridCellRenderer/BtnDelete.vue";
 
 export default {
-  name: 'MyGrid',
   components: {
     AgGridVue,
     BtnDelete
@@ -33,7 +33,7 @@ export default {
       columnDefs: [
         { headerName: "Code", field: "code", hide: true },
         { headerName: "Id", field: "id" },
-        { headerName: "Pw", field: "pw", editable: true, 
+        { headerName: "Password", field: "pw", editable: true, 
           valueFormatter: (params) => {
             return '*'.repeat(params.value.length);
           }},
@@ -56,8 +56,10 @@ export default {
             }
           }
          },
-        { headerName: "Actions",
+        { headerName: "Action",
           cellRenderer: "BtnDelete",
+          filter: false,
+          sortable: false,
           cellRendererParams: {
             onDelete: this.clickedDelete
           }
@@ -73,7 +75,10 @@ export default {
       focusedRowData: null,
       focusedRowIndex: -1,
       agGridApi: null,
-      visiblePopMsgBox: false
+      visiblePopMsgBox: false,
+      msgUpdate: 'Updated!',
+      msgDelete: 'Deleted!',
+      popupMessage: ''
     };
   },
   mounted() {
@@ -114,8 +119,6 @@ export default {
 
         this.rowData.splice(this.focusedRowIndex, 1);
         this.agGridApi.setRowData(this.rowData);
-
-        alert("Delete completed!");
       }
       catch (err) {
         console.error(err);
@@ -144,23 +147,26 @@ export default {
       this.focusedRowData = this.getFocusedRowData(this.focusedRowIndex);
     },
     onCellEditingStopped(params){
-      this.updateAccount(params.node.rowIndex);//onCellFocused 시점이 더 빨라서 엉뚱한 focusedRowIndex가 잡힘
-      this.showPopMsgBox();
+      if (params.oldValue !== params.newValue) {
+        this.updateAccount(params.node.rowIndex);//onCellFocused 시점이 더 빨라서 엉뚱한 focusedRowIndex가 잡힘
+        this.showPopMsgBox(this.msgUpdate);
+      }
     },
     onResize(){
       if(this.agGridApi) {
         this.agGridApi.sizeColumnsToFit();
       }
-
-      console.log("resizing");
     },
     clickedDelete(){
       this.deleteAccount(this.focusedRowData.code);
+      this.showPopMsgBox(this.msgDelete);
     },
     getFocusedRowData(rowIndex){
       return this.agGridApi.getDisplayedRowAtIndex(rowIndex).data;
     },
-    showPopMsgBox(){
+    showPopMsgBox(msg){
+      this.popupMessage = msg;
+
       this.visiblePopMsgBox = true;
 
       setTimeout(() => {

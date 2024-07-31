@@ -22,6 +22,8 @@
 <style lang="scss" scoped>
 .btnDelete {
   background-color: maroon;
+  border: 0;
+  border-radius: 4px;
 }
 </style>
   
