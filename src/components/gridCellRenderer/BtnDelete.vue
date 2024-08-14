@@ -1,5 +1,5 @@
 <template>
-    <button class="btnDelete" @click="btnClickedHandler">Delete</button>
+    <button class="btnDelete" @click="btnClickedHandler">삭제</button>
 </template>
   
 <script>
@@ -24,6 +24,11 @@
   background-color: maroon;
   border: 0;
   border-radius: 4px;
+
+  &:hover{
+    background-color:rgb(148, 20, 20);
+    transition: 0.2s ease-out;
+  }
 }
 </style>
   

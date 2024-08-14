@@ -48,7 +48,7 @@ export default {
           this.$router.push('/user');
         }
 
-        console.log(response);
+        console.log(response.data);
       }
       catch (err) {
         console.error(err);

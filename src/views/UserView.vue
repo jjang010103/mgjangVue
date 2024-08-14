@@ -3,7 +3,7 @@
     <transition name="fade">
       <div v-if="visiblePopMsgBox" class="divPopMsgBox" ref="msgBoxPopup">{{ popupMessage }}</div>
     </transition>
-    <div class="divBtn">추가</div>
+    <button class="btnTopMenu" @click="showAddUserForm">추가</button>
     <div class="divGrid">
       <ag-grid-vue
         class="ag-theme-alpine-dark"
@@ -14,6 +14,7 @@
         @cellFocused="onCellFocused"
         @cellEditingStopped="onCellEditingStopped"></ag-grid-vue>
     </div>
+    <FormUserAdd v-if="visibleAddUserForm"/>
   </div>
 </template>
 
@@ -22,11 +23,13 @@ import { AgGridVue } from 'ag-grid-vue3';
 import axios from 'axios';
 import { getToken } from '@/utils/tokenUtil';
 import BtnDelete from "@/components/gridCellRenderer/BtnDelete.vue";
+import FormUserAdd from "@/components/user/FormAddUser.vue";
 
 export default {
   components: {
     AgGridVue,
-    BtnDelete
+    BtnDelete,
+    FormUserAdd
   },
   data() {
     return {
@@ -78,7 +81,8 @@ export default {
       visiblePopMsgBox: false,
       msgUpdate: 'Updated!',
       msgDelete: 'Deleted!',
-      popupMessage: ''
+      popupMessage: '',
+      visibleAddUserForm: false
     };
   },
   mounted() {
@@ -172,6 +176,9 @@ export default {
       setTimeout(() => {
         this.visiblePopMsgBox = false;
       }, 750);
+    },
+    showAddUserForm(){
+      this.visibleAddUserForm = true;
     }
   }
 };
